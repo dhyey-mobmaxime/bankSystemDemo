@@ -1,0 +1,15 @@
+# Install Dependencies
+pip3 install -r requirements.txt
+
+# You may required to install Redis Server for celery
+
+#If you delete the database then You have to run this commands
+1. python3 manage.py migrate
+2.python3 manage.py createsuperuser (Super User is manager)
+
+#Run This command to start Django Server in One terminal
+1. python3 manage.py runserver
+
+
+# Run This Celery Command in Another Terminal
+2.celery -A bank worker -l info

@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance</title>
+</head>
+<body>
+{% block content %}
+    <div class="container pd-x-0">
+        <button class="btn btn-primary float-right" data-toggle="modal" data-target="#addemp">Add Employee</button>
+        <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+            <div>
+                <nav aria-label="breadcrumb">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}" id="ALERT" role="alert">
+
+                                <!-- <div {% if message.tags %} classs="{{ message.tags }}
+                                    "{% endif %} id="ALERT" role="alert"> -->
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+                        <li class="breadcrumb-item"><a href="{% url 'customer:index' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Customer Listing</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="row row-lg">
+            <div class="table-responsive">
+                <br>
+                <table class="table table-striped mg-b-0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>First name</th>
+                        <th>Last name</th>
+                        <th>Email</th>
+                        <th>Account Number</th>
+                        <th>Current Balance</th>
+                        <th>Last Activity</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ user.firstName }}</td>
+                            <td>{{ user.lastName }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.account_number }}</td>
+                            <td>{{ user.current_balance }}</td>
+                            <td>{{ user.updated_at }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% if is_paginated %}
+                    <ul class="pagination">
+                        {% if page_obj.has_previous %}
+                            <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                        {% else %}
+                            <li class="disabled"><span>&laquo;</span></li>
+                        {% endif %}
+                        {% for i in paginator.page_range %}
+                            {% if page_obj.number == i %}
+                                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                            {% else %}
+                                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                        {% else %}
+                            <li class="disabled"><span>&raquo;</span></li>
+                        {% endif %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div><!-- row -->
+    </div>
+
+    <!-- add employee modal -->
+    <div id="addemp" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form method="post" enctype="multipart/form-data" id="addcustomer" name="addcustomer">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                        <h4 class="modal-title">Add Customer</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="row row-xs">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label for="firstName" class="col-sm-2 col-form-label">First Name<span
+                                            class="tx-danger">*</span></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="firstName" name="firstName"
+                                               placeholder="First Name" required autocomplete="off"
+                                               onCopy="return false" onDrag="return false" onDrop="return false"
+                                               onPaste="return false">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="lastName" class="col-sm-2 col-form-label">Last Name<span
+                                            class="tx-danger">*</span></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="lastName" name="lastName"
+                                               placeholder="Last Name" required autocomplete="off" onCopy="return false"
+                                               onDrag="return false" onDrop="return false" onPaste="return false">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="email" class="col-sm-2 col-form-label">Email<span
+                                            class="tx-danger">*</span></label>
+                                    <div class="col-sm-10">
+                                        <input type="email" class="form-control" id="email" name="email"
+                                               placeholder="name" required onCopy="return false" onDrag="return false"
+                                               onDrop="return false" onPaste="return false">
+                                        <span class="emailerror" id="error">Enter Email Properly</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="password" class="col-sm-2 col-form-label">Password<span
+                                            class="tx-danger">*</span></label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" id="password" name="password"
+                                               placeholder="Password" required="" title="Alphabetics and Numbers only"
+                                               autocomplete="off" onCopy="return false" onDrag="return false"
+                                               onDrop="return false" onPaste="return false">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="cpassword" class="col-sm-2 col-form-label">Confirm Password<span
+                                            class="tx-danger">*</span></label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" id="cpassword" name="cpassword"
+                                               placeholder="Confirm Password" required=""
+                                               title="Alphabetics and Numbers only" autocomplete="off"
+                                               onCopy="return false" onDrag="return false" onDrop="return false"
+                                               onPaste="return false">
+                                    </div>
+                                </div>
+                                <div class="form-group row mg-b-0">
+                                    <div class="col-sm-10">
+                                        <!-- <button  class="btn btn-primary" id="create-emp">Submit</button> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- row -->
+                    </div>
+                    <div class="modal-footer text-left">
+                        <input class="btn btn-primary" id="create-user" type="submit">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+</body>
+</html>

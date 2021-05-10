@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<body>
+{% block content %}
+
+    <div class="container pd-x-0">
+        <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+            <div>
+                <h4 class="mg-b-0 tx-spacing--1">Welcome to Bank ABC</h4>
+            </div>
+        </div>
+    </div>
+    {% if request.user.user_type == 1 %}
+        <div class="row row-xs">
+            <div class="col-lg-12 col-xl-12 mg-t-10">
+                <div class="card mg-b-10">
+                    <div class="card-header pd-t-20 d-sm-flex align-items-start justify-content-between bd-b-0 pd-b-0">
+                        <div>
+                            <h6 class="mg-b-5">Recent Transactions</h6>
+                            <p class="tx-13 tx-color-03 mg-b-0">&nbsp;</p>
+                        </div>
+
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-dashboard mg-b-0">
+                            <thead>
+                            <tr>
+                                <th class="text-center">Id</th>
+                                <th class="text-center">Customer Name</th>
+                                <th class="text-center">Account Number</th>
+                                <th class="text-center">Transaction Type</th>
+                                <th class="text-center">Time</th>
+                                <th class="text-center">Amount</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for a in transactions %}
+                                <tr>
+                                    <td class="text-center">{{ forloop.counter }}</td>
+                                    <td class="text-center">{{ a.account.firstName }}</td>
+                                    <td class="text-center">{{ a.account.account_number }}</td>
+                                    {% if a.transaction_type == 1 %}
+                                        <td class="text-center">Withdrawn</td>
+                                    {% else %}
+                                        <td class="text-center">Deposited</td>
+                                    {% endif %}
+                                    <td class="text-center">{{ a.created_at }}</td>
+                                    <td class="text-center">{{ a.amount }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div><!-- table-responsive -->
+                </div><!-- card -->
+            </div><!-- col -->
+        </div>
+    {% else %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        <div class="row row-xs">
+            <div class="col-sm-6 col-lg-4 mg-t-10 mg-sm-t-0">
+                <div class="card card-body">
+                    <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1 mainhead">Deposit</h3>
+                    <form method="post" name="debitForm">
+                        {% csrf_token %}
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="amount" name="amount" placeholder="Deposit Amount" required autocomplete="off" onCopy="return false" onDrag="return false" onDrop="return false" onPaste="return false">
+                                </div>
+                                <div class="col-sm-4">
+                                    <input  class="btn btn-primary" type="submit" name="deposit">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- col -->
+            <div class="col-sm-6 col-lg-4 mg-t-10 mg-sm-t-0">
+                <div class="card card-body">
+                    <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1 mainhead">Withdrawn</h3>
+                    <form method="post" name="creditForm">
+                        {% csrf_token %}
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="amount" name="amount" placeholder="Withdrawn Amount" required autocomplete="off" onCopy="return false" onDrag="return false" onDrop="return false" onPaste="return false">
+                                </div>
+                                <div class="col-sm-4">
+                                    <input  class="btn btn-primary" type="submit" name="withdrawn">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- col -->
+            <div class="col-sm-6 col-lg-4 mg-t-10 mg-sm-t-0">
+                <div class="card card-body">
+                    <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1 mainhead">Inquiry</h3>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                {% if balance %}
+                                    <div class="col-sm-8 text-center" style="padding-top:10px;">
+                                        <span>{{ balance }}</span> Rs
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input  class="btn btn-primary" id="create-user" type="submit" name="inquiry">
+                                    </div>
+                                {% else %}
+                                    <div class="col-sm-12 col-md-6 col-lg-6">
+                                        <input  class="btn btn-primary" id="create-user" type="submit" name="inquiry">
+                                    </div>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- col -->
+        <div>
+    {% endif %}
+    <script src="{% static 'lib/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'assets/js/indexpage.js' %}"></script>
+
+{% endblock %}
+</body>
+</html>

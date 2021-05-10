@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance</title>
+</head>
+<body>
+{% block content %}
+    <div class="container pd-x-0">
+        <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+            <div>
+                <nav aria-label="breadcrumb">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}" id="ALERT" role="alert">
+
+                                <!-- <div {% if message.tags %} classs="{{ message.tags }}"{% endif %} id="ALERT" role="alert"> -->
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+                        <li class="breadcrumb-item"><a href="{% url 'customer:index' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Transaction Listing</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="row row-lg">
+                <select id="selectedUser" name="" >
+                    <option value="None">Select User</option>
+                    {% if users %}
+                        {% for user in users %}
+                            <option value="{{ user.pk }}">{{ user.firstName }} {{ user.lastName }}</option>
+                        {% endfor %}
+                    {% endif %}
+                </select>&nbsp;&nbsp;
+
+                <input class="col-sm-2 form-control" type="text" name="from" id="transaction_from" placeholder="From Date" autocomplete="off" >
+                &nbsp;&nbsp;&nbsp;
+                <input class="col-sm-2 form-control" type="text" name="to" id="transaction_to" placeholder="To Date" autocomplete="off"  >&nbsp;
+
+                <button class="btn btn-primary" id="transactionSubmit">Submit</button>&nbsp;&nbsp;
+                <select id="exportLinkbutton" class="btn btn-success">
+                    <option>Select File Type</option>
+                    <option id="pdf">PDF</option>
+                    <option id="excel">XLSX</option>
+                    <option id="csv">CSV</option>
+                </select>
+            <div class="table-responsive">
+                <br>
+                <table class="table table-striped mg-b-0" id="user_listing" width="100%">
+                </table>
+            </div>
+        </div><!-- row -->
+    </div>
+{% endblock %}
+
+</body>
+</html>

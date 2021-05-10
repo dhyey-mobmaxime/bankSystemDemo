@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Favicon -->
+
+    <title>Bank ABC</title>
+
+    <!-- vendor css -->
+    <link href="{% static 'lib/@fortawesome/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/ionicons/css/ionicons.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/jqvmap/jqvmap.min.css' %}" rel="stylesheet">
+
+    <!-- DashForge CSS -->
+    <link href="{% static 'assets/css/jquery.dataTables.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/select2/css/select2.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'assets/css/dashforge.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/dashforge.dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/dashforge.demo.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/jquery.fancybox.css' %}">
+    <style>
+        .hidden {
+            display: none;
+        }
+
+        table.dataTable {
+            width: 700px;
+        }
+    </style>
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+
+<aside class="aside aside-fixed">
+    <div class="aside-header">
+        <a href="#" class="aside-logo">Bank<span>ABC</span></a>
+        <a href="#" class="aside-menu-link">
+            <i data-feather="menu"></i>
+            <i data-feather="x"></i>
+        </a>
+    </div>
+    <div class="aside-body">
+        <div class="aside-loggedin">
+            <div class="d-flex align-items-center justify-content-start">
+                <a href="#" class="avatar"><span
+                        class="avatar-initial bg-dark rounded-circle"><img src="{% static 'img/face.jpeg' %}"
+                                                                           style="border-radius: inherit;"></span></a>
+                {% if request.user.user_type == 1 %}
+                    <span style="padding-left: 10px;"><h6>{{ request.user.username|upper }}</h6></span>
+                {% else %}
+                    <span style="padding-left: 10px;"><h6>{{ request.user.firstName|upper }}</h6></span>
+                {% endif %}
+                <div class="aside-alert-link">
+                    <a href="{% url 'customer:logout' %}" data-toggle="tooltip" title="Sign out"><i
+                            data-feather="log-out"></i></a>
+                </div>
+            </div>
+        </div><!-- aside-loggedin -->
+        <ul class="nav nav-aside">
+            {% if request.user.user_type == 1 %}
+                <li class="nav-item"><a href="{% url 'customer:index' %}" class="nav-link"><i data-feather="globe"></i>
+                    <span>Dashboard</span></a>
+                </li>
+                <li class="nav-item"><a href="{% url 'customer:customerListing' %}" class="nav-link">
+                    <i data-feather="globe"></i><span>Customers</span></a>
+                </li>
+                <li class="nav-item"><a href="{% url 'customer:transactionsListing' %}" class="nav-link">
+                    <i data-feather="globe"></i><span>Transactions</span></a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</aside>
+
+<div class="content ht-100v pd-0">
+    <div class="content-header">
+        <div class="card-body pd-y-30">
+        </div>
+    </div>
+    <!-- content-header -->
+    <div class="content-body">
+        {% block content %}
+        {% endblock %}
+    </div>
+</div>
+
+<script src="{% static 'lib/jquery/jquery.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+<script src="{% static 'lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'lib/feather-icons/feather.min.js' %}"></script>
+<script src="{% static 'lib/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+<script src="{% static 'lib/jquery.flot/jquery.flot.js' %}"></script>
+<script src="{% static 'lib/jquery.flot/jquery.flot.stack.js' %}"></script>
+<script src="{% static 'lib/jquery.flot/jquery.flot.resize.js' %}"></script>
+<script src="{% static 'lib/chart.js/Chart.bundle.min.js' %}"></script>
+<script src="{% static 'lib/jqvmap/jquery.vmap.min.js' %}"></script>
+<script src="{% static 'lib/jqvmap/maps/jquery.vmap.usa.js' %}"></script>
+
+<script src="{% static 'lib/jqueryui/jquery-ui.min.js' %}"></script>
+<script src="{% static 'lib/select2/js/select2.min.js' %}"></script>
+<script src="{% static 'lib/parsleyjs/parsley.min.js' %}"></script>
+<script src="{% static 'assets/js/dashforge.js' %}"></script>
+<script src="{% static 'assets/js/dashforge.aside.js' %}"></script>
+<script src="{% static 'assets/js/dashforge.sampledata.js' %}"></script>
+
+<!-- append theme customizer -->
+<script src="{% static 'lib/js-cookie/js.cookie.js' %}"></script>
+<script src="{% static 'assets/js/dashforge.settings.js' %}"></script>
+<script src="{% static 'assets/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'assets/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'assets/js/buttons.flash.min.js' %}"></script>
+<script src="{% static 'assets/js/jszip.min.js' %}"></script>
+<script src="{% static 'assets/js/pdfmake.min.js' %}"></script>
+<script src="{% static 'assets/js/vfs_fonts.js' %}"></script>
+<script src="{% static 'assets/js/buttons.html5.min.js' %}"></script>
+<script src="{% static 'assets/js/buttons.print.min.js' %}"></script>
+<script src="{% static 'assets/js/jquery.validate.min.js' %}"></script>
+<script src="{% static 'assets/js/additional-methods.min.js' %}"></script>
+<script src="{% static 'assets/js/base.js' %}"></script>
+{% block JS %}
+
+
+{% endblock %}
+<script>
+    
+</script>
+</body>
+</html>
