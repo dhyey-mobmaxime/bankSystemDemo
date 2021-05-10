@@ -19,14 +19,8 @@ class LogIn(TemplateView):
         user = authenticate(request, username=email, password=password)
         context = {}
         if user is not None:
-            if not user.is_active:
-                context['msg'] = "User is not Active! Contact To Admin!"
-                context['type'] = "danger"
-                return render(request, "login.html", context=context)
             login(request, user)
             return redirect('customer:index')
-        context['msg'] = "No User found with this Username!!"
-        context['type'] = "danger"
         return render(request, "login.html", context=context)
 
 
@@ -49,7 +43,7 @@ class Index(TemplateView):
     def post(self, request):
         if "deposit" in request.POST:
             amount = float(request.POST["amount"])
-            tran = Transaction.objects.create(amount=amount, transaction_type=2, account=request.user)
+            Transaction.objects.create(amount=amount, transaction_type=2, account=request.user)
             request.user.current_balance = request.user.current_balance + amount
             request.user.save()
             messages.success(request, 'Amount Successfully Deposited...')
@@ -57,7 +51,7 @@ class Index(TemplateView):
         elif "withdrawn" in request.POST:
             amount = float(request.POST["amount"])
             if request.user.current_balance > amount:
-                tran = Transaction.objects.create(amount=amount, transaction_type=1, account=request.user)
+                Transaction.objects.create(amount=amount, transaction_type=1, account=request.user)
                 request.user.current_balance = request.user.current_balance - amount
                 request.user.save()
                 messages.success(request, 'Amount Successfully Withdrawn...')
@@ -103,7 +97,6 @@ def TransactionListingAPI(request):
     selectedUser = request.GET.get("userid", None)
     dateFrom = request.GET.get("dateFrom", None)
     dateTo = request.GET.get("dateTo", None)
-    print(selectedUser, dateFrom, dateTo)
     if dateFrom and dateTo:
         allData = Transaction.objects.filter(created_at__range=[dateFrom,dateTo]).order_by('-created_at')
     else:
